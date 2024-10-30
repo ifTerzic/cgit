@@ -1,0 +1,20 @@
+{
+  "name": "cgit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/script.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "shx rm -rf ./dist && tsc",
+    "watch": "tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.17.12",
+    "shx": "^0.3.4",
+    "typescript": "^5.6.3"
+  }
+}
