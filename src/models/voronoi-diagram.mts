@@ -1,6 +1,8 @@
-export class VoronoiDiagram implements IModel {
+import { BaseModel } from "./BaseModel.mjs";
+
+export class VoronoiDiagram extends BaseModel {
   name = "Voronoi Diagram";
-  render(ctx: CanvasRenderingContext2D): void {
-    console.log(ctx);
+  render(): void {
+    throw new Error("Not Implemented");
   }
 }

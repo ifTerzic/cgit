@@ -1,12 +1,7 @@
-export interface IModel {
-  name: string;
-  render(): void;
-  resetCanvas(): void;
-}
+import { IModel } from "./IModel.mjs";
 
 export abstract class BaseModel implements IModel {
   name: string;
-  ctx: CanvasRenderingContext2D;
 
   constructor(
     protected ctx: CanvasRenderingContext2D,

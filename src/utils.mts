@@ -66,8 +66,3 @@ export function getCanvas2D(): CanvasRenderingContext2D {
 
   return ctx;
 }
-
-export function initModelSelection(models: IModel[]): void {
-  const modelNames = models.map((m) => m.name);
-  console.log(modelNames);
-}

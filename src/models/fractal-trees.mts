@@ -1,54 +1,50 @@
 import { Vec2 } from "../utils.mjs";
+import { BaseModel } from "./BaseModel.mjs";
 
-export class FractalTrees implements IModel {
-  name = "Fractal Trees";
+export class FractalTrees extends BaseModel {
   leftAngle = (2 * Math.PI) / 11;
   rightAngle = (2 * Math.PI) / 7;
   ratio = 0.75;
-  getCanvasCenter(ctx: CanvasRenderingContext2D): Vec2 {
-    const w = ctx.canvas.width;
-    const h = ctx.canvas.height;
+
+  getCanvasCenter(): Vec2 {
+    const w = this.ctx.canvas.width;
+    const h = this.ctx.canvas.height;
 
     return new Vec2(w / 2, h / 2);
   }
 
-  render(ctx: CanvasRenderingContext2D): void {
+  render(): void {
     const depth = 1;
-    const start = this.getCanvasCenter(ctx);
+    const start = this.getCanvasCenter();
     const dir = new Vec2(0, -75);
-    this.drawRect(ctx, start, dir.rev());
-    this.renderBranch(ctx, start, dir, depth);
+    this.drawRect(start, dir.rev());
+    this.renderBranch(start, dir, depth);
   }
 
-  renderBranch(
-    ctx: CanvasRenderingContext2D,
-    pos: Vec2,
-    dir: Vec2,
-    depth: number,
-  ) {
+  renderBranch(pos: Vec2, dir: Vec2, depth: number) {
     if (depth === 0) return;
     const left = dir.copy().addAngle(this.leftAngle).mul(this.ratio);
     const right = dir.copy().addAngle(-this.rightAngle).mul(this.ratio);
 
-    this.drawRect(ctx, pos, left);
-    this.drawRect(ctx, pos, right);
+    this.drawRect(pos, left);
+    this.drawRect(pos, right);
 
-    this.renderBranch(ctx, pos.add(left), left, depth - 1);
-    this.renderBranch(ctx, pos.add(right), right, depth - 1);
+    this.renderBranch(pos.add(left), left, depth - 1);
+    this.renderBranch(pos.add(right), right, depth - 1);
   }
 
-  drawLine(ctx: CanvasRenderingContext2D, pos: Vec2, dir: Vec2) {
-    ctx.moveTo(pos.x, pos.y);
-    ctx.lineTo(pos.x + dir.x, pos.y + dir.y);
-    ctx.strokeStyle = "black";
-    ctx.stroke();
+  drawLine(pos: Vec2, dir: Vec2) {
+    this.ctx.moveTo(pos.x, pos.y);
+    this.ctx.lineTo(pos.x + dir.x, pos.y + dir.y);
+    this.ctx.strokeStyle = "black";
+    this.ctx.stroke();
   }
 
-  drawRect(ctx: CanvasRenderingContext2D, pos: Vec2, dir: Vec2) {
-    this.drawLine(ctx, pos, dir);
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-    ctx.fillStyle = "black";
-    ctx.strokeRect(pos.x, pos.y, dir.x, dir.y);
+  drawRect(pos: Vec2, dir: Vec2) {
+    this.drawLine(pos, dir);
+    this.ctx.beginPath();
+    this.ctx.moveTo(pos.x, pos.y);
+    this.ctx.fillStyle = "black";
+    this.ctx.strokeRect(pos.x, pos.y, dir.x, dir.y);
   }
 }
