@@ -37,16 +37,22 @@ export function createModelOptionElement(model: IModel): HTMLOptionElement {
 
 export function initModelSelection(models: IModel[]): void {
   const modelSelect = getModelSelect();
-  models.forEach((m) => {
+
+  models.forEach((m: IModel, index: number) => {
     const optionEl = createModelOptionElement(m);
     modelSelect.appendChild(optionEl);
+    // render the first registered model
+    if (index === 0) {
+      m.resetCanvas();
+      m.render();
+    }
   });
+
   modelSelect.addEventListener("change", function () {
     const modelToRender = models.filter((m) => m.name === this.value);
     if (modelToRender.length === 0) {
       throw new Error("Unreachable");
     }
-
     if (modelToRender.length > 1) {
       throw new Error(
         "Ambigious Modelname provided. Please change it in the code brev.",

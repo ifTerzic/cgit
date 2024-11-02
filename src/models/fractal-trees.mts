@@ -14,7 +14,7 @@ export class FractalTrees extends BaseModel {
   }
 
   render(): void {
-    const depth = 1;
+    const depth = 8;
     const start = this.getCanvasCenter();
     const dir = new Vec2(0, -75);
     this.drawRect(start, dir.rev());

@@ -7,8 +7,8 @@ import { IModel } from "./models/IModel.mjs";
 function main() {
   const ctx = getCanvas2D();
   const models: Array<IModel> = [
-    new FractalTrees(ctx, "Fractal Trees"),
     new VoronoiDiagram(ctx, "Voronoi Diagram"),
+    new FractalTrees(ctx, "Fractal Trees"),
   ];
   initModelSelection(models);
 }

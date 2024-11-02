@@ -1,3 +1,14 @@
+export class Point {
+  pos: Vec2;
+  color: string;
+  radius: number;
+  constructor(pos: Vec2, color: string, radius: number = 1) {
+    this.pos = pos;
+    this.color = color;
+    this.radius = radius;
+  }
+}
+
 export class Vec2 {
   x: number;
   y: number;
@@ -65,4 +76,13 @@ export function getCanvas2D(): CanvasRenderingContext2D {
   }
 
   return ctx;
+}
+
+export function getRandomColor() {
+  var letters = "0123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
