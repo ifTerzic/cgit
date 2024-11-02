@@ -3,12 +3,12 @@ import { Vec2, Point, getRandomColor } from "../utils.mjs";
 
 export class VoronoiDiagram extends BaseModel {
   name = "Voronoi Diagram";
-  points: Point[] = [];
   render(): void {
     const points = 8;
-    this.initRandomPoints(points);
-    this.renderPoints();
-    this.calculatePointColor();
+    const centroids = this.initRandomPoints(points);
+    const vColors = this.calculatePointColor(centroids);
+    this.renderPoints(vColors);
+    this.renderPoints(centroids, "black");
   }
 
   getCanvasDimensions(): [number, number] {
@@ -17,22 +17,26 @@ export class VoronoiDiagram extends BaseModel {
     return [w, h];
   }
 
-  calculatePointColor() {
+  calculatePointColor(points: Point[]): Point[] {
     const [w, h] = this.getCanvasDimensions();
+    const result: Point[] = [];
     for (let y = 0; y < h; ++y) {
       for (let x = 0; x < w; ++x) {
         let shortestDistance = w * h;
-        for (const point of this.points) {
-          const c = new Vec2(x, y);
+        const c = new Vec2(x, y);
+        const p = new Point(c, "black");
+        for (const point of points) {
           const d = point.pos.sub(c).len();
           if (d < shortestDistance) {
             shortestDistance = d;
-            const p = new Point(c, point.color);
-            this.renderPoint(p);
+            p.color = point.color;
           }
         }
+
+        result.push(p);
       }
     }
+    return result;
   }
   renderPoint(p: Point) {
     this.ctx.moveTo(p.pos.x, p.pos.y);
@@ -43,21 +47,21 @@ export class VoronoiDiagram extends BaseModel {
     this.ctx.fill();
     this.ctx.stroke();
   }
-  renderPoints() {
-    for (const point of this.points) {
+  renderPoints(points: Point[], color: string | undefined = undefined) {
+    for (const point of points) {
       const p = point.pos;
       this.ctx.moveTo(p.x, p.y);
       this.ctx.beginPath();
       this.ctx.arc(p.x, p.y, point.radius, 0, 2 * Math.PI);
-      this.ctx.strokeStyle = point.color;
-      this.ctx.fillStyle = point.color;
+      this.ctx.strokeStyle = color ?? point.color;
+      this.ctx.fillStyle = color ?? point.color;
       this.ctx.fill();
       this.ctx.stroke();
     }
   }
 
-  initRandomPoints(n: number) {
-    this.points.length = 0;
+  initRandomPoints(n: number): Point[] {
+    const result: Point[] = [];
     const [w, h] = this.getCanvasDimensions();
     for (let i = 0; i < n; ++i) {
       const x = Math.random() * w;
@@ -68,7 +72,8 @@ export class VoronoiDiagram extends BaseModel {
       const pos = new Vec2(x, y);
       const p = new Point(pos, c, r);
 
-      this.points.push(p);
+      result.push(p);
     }
+    return result;
   }
 }
